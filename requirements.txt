@@ -1,0 +1,10 @@
+streamlit
+torch
+torchvision
+transformers
+git+https://github.com/cocodataset/panopticapi.git
+matplotlib
+pillow
+requests
+timm==0.9.16
+opencv-python
