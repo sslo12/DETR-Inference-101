@@ -1,10 +1,17 @@
+wheel
+
 streamlit
-torch
-torchvision
+torch>=2.2.0,<2.8.0
+torchvision>=0.15.0,<0.25.0
 transformers
 git+https://github.com/cocodataset/panopticapi.git
 matplotlib
 pillow
 requests
 timm==0.9.16
-opencv-python
+opencv-python-headless>=4.8.0
+scipy>=1.11.0
+
+# Detectron2 (requiere compilador C++ y CUDA para GPU)
+git+https://github.com/facebookresearch/detectron2.git
+
