@@ -1,0 +1,165 @@
+# app.py
+import io
+import math
+import requests
+from copy import deepcopy
+
+import numpy as np
+import streamlit as st
+import torch
+import matplotlib.pyplot as plt
+from PIL import Image
+from transformers import DetrFeatureExtractor, DetrForSegmentation
+
+# Detectron2
+from detectron2.utils.visualizer import Visualizer
+from detectron2.data import MetadataCatalog
+
+
+# ---------- utilidades -------------------------------------------------
+def load_image(src):
+    """Carga una imagen desde URL o desde un objeto subido."""
+    if isinstance(src, str) and src.startswith("http"):
+        return Image.open(requests.get(src, stream=True).raw).convert("RGB")
+    elif hasattr(src, "read"):
+        return Image.open(src).convert("RGB")
+    else:
+        raise ValueError("Input no válido (ni URL ni fichero)")
+
+
+@st.cache_resource(show_spinner=False)
+def load_model():
+    """Descarga y cachea extractor + modelo panóptico."""
+    extractor = DetrFeatureExtractor.from_pretrained("facebook/detr-resnet-101-panoptic")
+    model = DetrForSegmentation.from_pretrained("facebook/detr-resnet-101-panoptic")
+    model.eval()
+    return extractor, model
+
+
+def predict_panoptic(img: Image.Image, extractor, model, thr=0.85):
+    """Devuelve el diccionario panóptico y los outputs crudos."""
+    inputs = extractor(images=img, return_tensors="pt")
+    with torch.no_grad():
+        outputs = model(**inputs)
+    panoptic = extractor.post_process_panoptic_segmentation(
+        outputs,
+        target_sizes=[img.size[::-1]],  # (alto, ancho)
+        threshold=thr,
+    )[0]
+    return panoptic, outputs
+
+
+# ---------- visualización detectron2 -----------------------------------
+def visualize_with_detectron2(img_pil: Image.Image, result_dict: dict) -> np.ndarray:
+    segments_info = deepcopy(result_dict["segments_info"])
+    panoptic_seg = result_dict["segmentation"]
+    if isinstance(panoptic_seg, torch.Tensor):
+        panoptic_seg = panoptic_seg.cpu().numpy()
+    final_h, final_w = panoptic_seg.shape
+
+    meta = MetadataCatalog.get("coco_2017_val_panoptic_separated")
+
+    for seg in segments_info:
+        cid = seg.get("category_id", seg.get("label_id"))
+        if cid is None:
+            raise KeyError("No se encontró 'category_id' ni 'label_id' en segments_info")
+
+        # Asignamos 'isthing' según la metadata oficial
+        seg["isthing"] = cid in meta.thing_dataset_id_to_contiguous_id
+
+        # Ajustar category_id al formato interno de Detectron2
+        if seg["isthing"]:
+            seg["category_id"] = meta.thing_dataset_id_to_contiguous_id.get(cid, cid)
+        else:
+            seg["category_id"] = meta.stuff_dataset_id_to_contiguous_id.get(cid, cid)
+
+    vis = Visualizer(np.array(img_pil.resize((final_w, final_h)))[:, :, ::-1], meta, scale=1.0)
+    vis._default_font_size = 18
+
+    panoptic_seg_tensor = torch.from_numpy(panoptic_seg.astype(np.int32))
+    vis = vis.draw_panoptic_seg_predictions(panoptic_seg_tensor, segments_info, area_threshold=0)
+
+    return vis.get_image()[:, :, ::-1]
+
+
+# ---------- visualización matplotlib -----------------------------------
+def fig_to_buf(fig) -> io.BytesIO:
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", bbox_inches="tight", pad_inches=0)
+    buf.seek(0)
+    plt.close(fig)
+    return buf
+
+
+def plot_panoptic(pano_img: np.ndarray) -> io.BytesIO:
+    fig, ax = plt.subplots(figsize=(12, 12))
+    ax.imshow(pano_img)
+    ax.axis("off")
+    return fig_to_buf(fig)
+
+
+def plot_masks_grid(outputs, keep_bool, ncols=5) -> io.BytesIO:
+    masks = outputs.pred_masks[0][keep_bool].sigmoid().cpu()
+    n = masks.size(0)
+    nrows = math.ceil(n / ncols)
+    fig, axs = plt.subplots(
+        nrows=nrows, ncols=ncols, figsize=(3.6 * ncols, 3.6 * nrows), squeeze=False
+    )
+    for row in axs:
+        for ax in row:
+            ax.axis("off")
+    for i, m in enumerate(masks):
+        r, c = divmod(i, ncols)
+        axs[r][c].imshow(m, cmap="cividis")
+    fig.tight_layout()
+    return fig_to_buf(fig)
+
+
+# ---------- Streamlit main ---------------------------------------------
+def main():
+    st.title("Inferencia panóptica con DETR-ResNet-101")
+
+    up = st.file_uploader(
+        "Sube una imagen (jpg/png) o deja vacío para usar la de ejemplo",
+        type=["jpg", "jpeg", "png"],
+    )
+    default_url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+    img = load_image(default_url if up is None else up)
+
+    st.image(img, caption="Imagen original", use_container_width=True)
+
+    if st.button("Ejecutar inferencia"):
+        extractor, model = load_model()
+        with st.spinner("Realizando inferencia…"):
+            panoptic, raw_out = predict_panoptic(img, extractor, model)
+        st.success("Inferencia completada.")
+
+        # 1) Grid de máscaras individuales (antes para verlas rápido)
+        scores = raw_out.logits.softmax(-1)[0, :, :-1].max(-1)[0]
+        keep = scores > 0.85
+        if keep.sum() == 0:
+            st.warning("Ninguna máscara supera el umbral de 0.85")
+        else:
+            st.subheader("Máscaras con alta confianza")
+            st.image(
+                plot_masks_grid(raw_out, keep),
+                caption=f"Máscaras con confianza > 0.85 ({keep.sum().item()} total)",
+                use_container_width=True,
+            )
+
+        # 2) Segmentación básica
+        st.subheader("Segmentación panóptica (colores sin etiquetas)")
+        st.image(
+            plot_panoptic(panoptic["segmentation"]),
+            use_container_width=True,
+        )
+
+        # 3) Panóptico con etiquetas (Detectron2)
+        with st.spinner("Visualizando con Detectron2…"):
+            vis_img = visualize_with_detectron2(img, panoptic)
+            st.subheader("Segmentación panóptica con etiquetas (Detectron2)")
+            st.image(vis_img, use_container_width=True)
+
+
+if __name__ == "__main__":
+    main()
