@@ -14,6 +14,7 @@ from transformers import DetrFeatureExtractor, DetrForSegmentation
 # Detectron2
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog
+from detectron2.utils.colormap import random_color
 
 
 # ---------- utilidades -------------------------------------------------
@@ -117,49 +118,111 @@ def plot_masks_grid(outputs, keep_bool, ncols=5) -> io.BytesIO:
 
 # ---------- Streamlit main ---------------------------------------------
 def main():
-    st.title("Inferencia panóptica con DETR-ResNet-101")
-
-    up = st.file_uploader(
-        "Sube una imagen (jpg/png) o deja vacío para usar la de ejemplo",
-        type=["jpg", "jpeg", "png"],
+    st.set_page_config(
+        page_title="Inferencia Panóptica DETR-ResNet-101",
+        layout="wide",
+        initial_sidebar_state="expanded"
     )
+
+    st.title("Inferencia panóptica con DETR-ResNet-101")
+    st.markdown(
+        """
+        Esta aplicación realiza segmentación panóptica usando el modelo DETR-ResNet-101, que combina detección 
+        y segmentación para identificar objetos y regiones en la imagen.
+
+        El proceso general del modelo es:
+
+        1. **Detección de objetos y regiones:** El modelo identifica qué partes de la imagen corresponden a distintos objetos o áreas.
+        2. **Segmentación panóptica:** Asigna una máscara a cada objeto o región, tanto "things" (objetos con forma definida) 
+           como "stuff" (fondos o áreas sin forma específica).
+        3. **Post-procesamiento:** Se refinan las máscaras y se produce un mapa segmentado que representa toda la escena.
+
+        Puedes subir una imagen propia o usar la de ejemplo para ver estos pasos reflejados en los resultados.
+        """
+    )
+
+    with st.sidebar:
+        st.header("Configuración")
+        up = st.file_uploader(
+            "Sube una imagen (jpg/png) o deja vacío para usar la de ejemplo",
+            type=["jpg", "jpeg", "png"],
+        )
+        thr = st.slider("Umbral de confianza para máscaras", 0.0, 1.0, 0.85, 0.01)
+        run_infer = st.button("Ejecutar inferencia")
+
     default_url = "http://images.cocodataset.org/val2017/000000039769.jpg"
     img = load_image(default_url if up is None else up)
 
-    st.image(img, caption="Imagen original", use_container_width=True)
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.image(img, caption="Imagen original", use_container_width=True)
 
-    if st.button("Ejecutar inferencia"):
+    if run_infer:
         extractor, model = load_model()
+
         with st.spinner("Realizando inferencia…"):
-            panoptic, raw_out = predict_panoptic(img, extractor, model)
+            panoptic, raw_out = predict_panoptic(img, extractor, model, thr=thr)
+
         st.success("Inferencia completada.")
 
-        # 1) Grid de máscaras individuales (antes para verlas rápido)
-        scores = raw_out.logits.softmax(-1)[0, :, :-1].max(-1)[0]
-        keep = scores > 0.85
-        if keep.sum() == 0:
-            st.warning("Ninguna máscara supera el umbral de 0.85")
-        else:
-            st.subheader("Máscaras con alta confianza")
-            st.image(
-                plot_masks_grid(raw_out, keep),
-                caption=f"Máscaras con confianza > 0.85 ({keep.sum().item()} total)",
-                use_container_width=True,
+        tabs = st.tabs(["Máscaras individuales", "Segmentación básica", "Con etiquetas (Detectron2)"])
+
+        with tabs[0]:
+            st.markdown(
+                """
+                ### Máscaras individuales con alta confianza
+                Esta sección muestra las máscaras segmentadas detectadas con un nivel de confianza superior al umbral seleccionado. 
+                Cada máscara representa una región específica detectada por el modelo en la imagen.
+                Útil para analizar qué objetos o áreas fueron identificados con mayor seguridad.
+                """
             )
+            scores = raw_out.logits.softmax(-1)[0, :, :-1].max(-1)[0]
+            keep = scores > thr
+            if keep.sum() == 0:
+                st.warning(f"Ninguna máscara supera el umbral de {thr:.2f}")
+            else:
+                colA, colB, colC = st.columns([1, 2, 1])
+                with colB:
+                    st.image(
+                        plot_masks_grid(raw_out, keep),
+                        caption=f"Máscaras con confianza > {thr:.2f} ({keep.sum().item()} total)",
+                        use_container_width=True,
+                    )
 
-        # 2) Segmentación básica
-        st.subheader("Segmentación panóptica (colores sin etiquetas)")
-        st.image(
-            plot_panoptic(panoptic["segmentation"]),
-            use_container_width=True,
-        )
+        with tabs[1]:
+            st.markdown(
+                """
+                ### Segmentación panóptica básica
+                Aquí se visualiza el mapa completo de segmentación, donde cada color representa una categoría o región segmentada. 
+                No se muestran etiquetas, solo el mapa de colores para facilitar la identificación visual rápida.
+                """
+            )
+            colA, colB, colC = st.columns([1, 2, 1])
+            with colB:
+                st.image(
+                    plot_panoptic(panoptic["segmentation"]),
+                    caption="Segmentación panóptica (colores sin etiquetas)",
+                    use_container_width=True,
+                )
 
-        # 3) Panóptico con etiquetas (Detectron2)
-        with st.spinner("Visualizando con Detectron2…"):
-            vis_img = visualize_with_detectron2(img, panoptic)
-            st.subheader("Segmentación panóptica con etiquetas (Detectron2)")
-            st.image(vis_img, use_container_width=True)
+        with tabs[2]:
+            st.markdown(
+                """
+                ### Segmentación panóptica con etiquetas Detectron2
+                Detectron2 es una librería avanzada desarrollada por Facebook AI Research para tareas de visión por computador,
+                especializada en segmentación, detección y reconocimiento de objetos.
 
+                Aquí usamos Detectron2 para representar visualmente las regiones segmentadas con etiquetas claras y colores distintivos,
+                facilitando la interpretación y análisis de los resultados del modelo DETR.
+
+                Esta combinación potencia la capacidad de visualización y comprensión de las segmentaciones panópticas generadas.
+                """
+            )
+            with st.spinner("Visualizando con Detectron2…"):
+                colA, colB, colC = st.columns([1, 2, 1])
+                with colB:
+                    vis_img = visualize_with_detectron2(img, panoptic)
+                    st.image(vis_img, caption="Segmentación panóptica con etiquetas (Detectron2)", use_container_width=True)
 
 if __name__ == "__main__":
     main()
