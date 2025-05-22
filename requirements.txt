@@ -1,8 +1,8 @@
 wheel
 
 streamlit
-torch>=2.2.0,<2.8.0
-torchvision>=0.15.0,<0.25.0
+torch>=2.2.0
+torchvision>=0.15.0
 transformers
 git+https://github.com/cocodataset/panopticapi.git
 matplotlib
@@ -14,4 +14,3 @@ scipy>=1.11.0
 
 # Detectron2 (requiere compilador C++ y CUDA para GPU)
 git+https://github.com/facebookresearch/detectron2.git
-
