@@ -132,10 +132,10 @@ def main():
 
         El proceso general del modelo es:
 
-        1. **Detección de objetos y regiones:** El modelo identifica qué partes de la imagen corresponden a distintos objetos o áreas.
-        2. **Segmentación panóptica:** Asigna una máscara a cada objeto o región, tanto "things" (objetos con forma definida) 
+        1. *Detección de objetos y regiones:* El modelo identifica qué partes de la imagen corresponden a distintos objetos o áreas.
+        2. *Segmentación panóptica:* Asigna una máscara a cada objeto o región, tanto "things" (objetos con forma definida) 
            como "stuff" (fondos o áreas sin forma específica).
-        3. **Post-procesamiento:** Se refinan las máscaras y se produce un mapa segmentado que representa toda la escena.
+        3. *Post-procesamiento:* Se refinan las máscaras y se produce un mapa segmentado que representa toda la escena.
 
         Puedes subir una imagen propia o usar la de ejemplo para ver estos pasos reflejados en los resultados.
         """
@@ -225,4 +225,4 @@ def main():
                     st.image(vis_img, caption="Segmentación panóptica con etiquetas (Detectron2)", use_container_width=True)
 
 if __name__ == "__main__":
-    main()
+        main()

@@ -62,4 +62,5 @@ st.markdown("""
 
 st.markdown('<div class="nav-button">', unsafe_allow_html=True)
 st.page_link("pages/about_detr.py", label="Explorar DETR →")
+st.page_link("pages/panoptic_segmentation.py", label="Segmentación Panoptica →")
 st.markdown('</div>', unsafe_allow_html=True)
