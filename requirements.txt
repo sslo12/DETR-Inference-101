@@ -9,7 +9,7 @@ matplotlib
 pillow
 requests
 timm==0.9.16
-opencv-python-headless>=4.8.0
+opencv-python>=4.11.0.86
 scipy>=1.11.0
 
 # Detectron2 (requiere compilador C++ y CUDA para GPU)
