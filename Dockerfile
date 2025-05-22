@@ -1,4 +1,3 @@
-# Use Python 3.9 with CUDA support for GPU acceleration (optional)
 FROM python:3.9-slim
 
 WORKDIR /app
