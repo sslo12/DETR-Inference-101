@@ -1,8 +1,8 @@
 # DETR-ResNet-101: Un Enfoque para la Segmentación Panóptica
-Este proyecto es una **implementación simplificada** del modelo *DETR (DEtection TRansformer)* propuesto por Facebook AI Research, aplicado específicamente a la tarea de **segmentación panóptica**.  
-Utiliza **Streamlit** para la visualización interactiva de los resultados y permite probar el modelo de manera local en un entorno aislado.
+Este proyecto es una implementación simplificada del modelo DETR (DEtection TRansformer) propuesto por Facebook AI Research, aplicado específicamente a la tarea de segmentación panóptica.  
+Utiliza Streamlit para la visualización interactiva de los resultados y permite probar el modelo de manera local en un entorno aislado.
 
-La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina **detección de instancias** y **segmentación semántica**, todo en una sola arquitectura basada en **transformers**.
+La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina detección de instancias y segmentación semántica, todo en una sola arquitectura basada en transformers.
 
 
 ## 🔍 ¿Qué hace este modelo?
