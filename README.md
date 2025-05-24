@@ -1,6 +1,6 @@
 # DETR-ResNet-101: Un Enfoque para la Segmentación Panóptica
 
-
+```
 ## 📁 Estructura del proyecto
 DETR-Inference-101/
 │
@@ -17,3 +17,4 @@ DETR-Inference-101/
 ├── README.md                          # Documentación principal del proyecto 
 ├── home.py                            # Script de inicio o página principal de la aplicación
 └── requirements.txt                   # Lista de dependencias del proyecto Python 
+```
