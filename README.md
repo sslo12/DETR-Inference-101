@@ -4,8 +4,6 @@ Utiliza Streamlit para la visualización interactiva de los resultados y permite
 
 La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina detección de instancias y segmentación semántica, todo en una sola arquitectura basada en transformers.
 
---
-
 ## 🛠️ Tecnologías Utilizadas
 
 <p align="center">
