@@ -37,8 +37,8 @@ Cada región de la imagen está coloreada según la clase identificada, y el mod
 - Generar salidas con **máscaras, clases e instancias únicas** por píxel.
 - Usar una arquitectura **end-to-end** sin necesidad de postprocesamiento como NMS.
 
-```
 ## 📁 Estructura del proyecto
+```
 DETR-Inference-101/
 │
 ├── pages/                             # Scripts para las diferentes secciones de la aplicación
