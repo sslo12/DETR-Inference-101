@@ -1,5 +1,14 @@
 # DETR-ResNet-101: Un Enfoque para la Segmentación Panóptica
 
+
+## 🔍 ¿Qué hace este modelo?
+**DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
+
+- Realizar **segmentación panóptica** precisa combinando detección de objetos y segmentación semántica.
+- Identificar tanto **cosas** (objetos individuales) como **stuff** (regiones amorfas).
+- Generar salidas con **máscaras, clases e instancias únicas** por píxel.
+- Usar una arquitectura **end-to-end** sin necesidad de postprocesamiento como NMS.
+
 ```
 ## 📁 Estructura del proyecto
 DETR-Inference-101/
