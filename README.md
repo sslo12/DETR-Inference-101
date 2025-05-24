@@ -9,7 +9,7 @@ La aplicación permite cargar una imagen y obtener como salida una segmentación
 A continuación, se muestran algunos ejemplos del resultado generado por la aplicación. Cada imagen representa una salida panóptica del modelo **DETR-ResNet-101**, combinando detección de instancias y segmentación semántica.
 
 <p align="center">
-  <img src="static/panoptic_example1.png" alt="Ejemplo de segmentación 1" width="400"/>
+  <img src="static/panoptic_example1.png" alt="Ejemplo de segmentación 1" width="450"/>
   <img src="static/panoptic_example2.png" alt="Ejemplo de segmentación 2" width="500"/>
 </p>
 
