@@ -4,6 +4,18 @@ Utiliza Streamlit para la visualización interactiva de los resultados y permite
 
 La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina detección de instancias y segmentación semántica, todo en una sola arquitectura basada en transformers.
 
+--
+
+## 🛠️ Tecnologías Utilizadas
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Transformers-HuggingFace-yellow?style=for-the-badge&logo=huggingface&logoColor=black" alt="Transformers" />
+  <img src="https://img.shields.io/badge/Detectron2-Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Detectron2" />
+</p>
+
 
 ## 🔍 ¿Qué hace este modelo?
 **DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
