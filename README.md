@@ -28,7 +28,7 @@ DETR-Inference-101/
 ├── .gitignore                         # Archivos y carpetas ignoradas por Git
 ├── Dockerfile                         # Configuración para contenedor Docker
 ├── README.md                          # Documentación principal del proyecto 
-├── home.py                            # Script de inicio o página principal de la aplicación
+├── home.py                            # Script de página principal de la aplicación
 └── requirements.txt                   # Lista de dependencias del proyecto Python 
 ```
 ## 👥 Créditos de Desarrollo
