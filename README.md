@@ -28,6 +28,42 @@ Cada región de la imagen está coloreada según la clase identificada, y el mod
   <img src="https://img.shields.io/badge/Detectron2-Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Detectron2" />
 </p>
 
+## 🚀 Despliegue del Proyecto
+
+Sigue estos pasos para ejecutar la aplicación localmente:
+
+### Prerrequisitos
+- Git instalado en tu sistema
+- Docker instalado y funcionando
+
+### Paso a Paso
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/sslo12/DETR-Inference-101
+   cd DETR-Inference-101
+   ```
+
+2. **Construir la imagen Docker**
+   ```bash
+   docker build -t detr-panoptic .
+   ```
+
+3. **Ejecutar el contenedor**
+   ```bash
+   docker run -p 8501:8501 detr-panoptic
+   ```
+
+4. **Acceder a la aplicación**
+   
+   Abre tu navegador web y visita:
+   ```
+   http://localhost:8501/
+   ```
+
+### Notas Adicionales
+- El puerto `8501` es el puerto por defecto de Streamlit
+- Asegúrate de que el puerto 8501 esté disponible en tu sistema
 
 ## 🔍 ¿Qué hace este modelo?
 **DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
