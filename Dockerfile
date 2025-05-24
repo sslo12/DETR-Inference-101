@@ -27,7 +27,7 @@ RUN pip install --upgrade pip wheel
 
 COPY requirements.txt .
 
-# Install PyTorch and torchvision (CPU version - compatible versions)
+# Install PyTorch and torchvision
 RUN pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0
 
 # Install Python dependencies
@@ -43,12 +43,11 @@ RUN pip install \
     numpy
 
 # Install panopticapi
-RUN pip install --no-cache-dir git+https://github.com/cocodataset/panopticapi.git
+RUN pip install git+https://github.com/cocodataset/panopticapi.git
 
 # Install detectron2
-RUN pip install --no-cache-dir git+https://github.com/facebookresearch/detectron2.git
+RUN pip install git+https://github.com/facebookresearch/detectron2.git
 
-# Copy application code
 COPY . .
 
 RUN mkdir -p static/sp
