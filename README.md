@@ -36,8 +36,6 @@ Sigue estos pasos para ejecutar la aplicación localmente:
 - Git instalado en tu sistema
 - Docker instalado y funcionando
 
-### Paso a Paso
-
 1. **Clonar el repositorio**
    ```bash
    git clone https://github.com/sslo12/DETR-Inference-101
