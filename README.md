@@ -10,7 +10,7 @@ A continuación, se muestran algunos ejemplos del resultado generado por la apli
 
 <p align="center">
   <img src="static/panoptic_example1.png" alt="Ejemplo de segmentación 1" width="400"/>
-  <img src="static/panoptic_example2.png" alt="Ejemplo de segmentación 2" width="400"/>
+  <img src="static/panoptic_example2.png" alt="Ejemplo de segmentación 2" width="500"/>
 </p>
 
 Cada región de la imagen está coloreada según la clase identificada, y el modelo asigna un ID único por instancia cuando corresponde.
