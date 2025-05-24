@@ -27,3 +27,24 @@ DETR-Inference-101/
 ├── home.py                            # Script de inicio o página principal de la aplicación
 └── requirements.txt                   # Lista de dependencias del proyecto Python 
 ```
+## 👥 Créditos de Desarrollo
+
+Esta implementación fue realizada como una prueba académica de inferencia y visualización del modelo **DETR-ResNet-101** aplicado a la **segmentación panóptica**.  
+No somos autores del modelo original, únicamente replicamos su funcionamiento como parte de una actividad de aprendizaje.
+
+**Desarrollado por:**
+
+- María José Clavijo Rojas  
+- Shirley Stefany Lombana
+- Santiago Valencia
+---
+
+## 📚 Fuente del Modelo
+
+Este proyecto está basado en el modelo DETR publicado por Facebook AI Research.
+
+- 📄 **Referencia APA:**  
+  Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., & Zagoruyko, S. (2020). *End-to-End Object Detection with Transformers*. arXiv preprint arXiv:2005.12872. https://doi.org/10.48550/arXiv.2005.12872
+
+- 🔗 **Repositorio oficial de GitHub:**  
+  [https://github.com/facebookresearch/detr](https://github.com/facebookresearch/detr)
