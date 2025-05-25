@@ -7,7 +7,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Estilos CSS personalizados con diferencia entre título y subtítulo
 st.markdown("""
     <style>
     .main-title {
@@ -97,11 +96,10 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-# Título más pequeño en español antes de las imágenes
 st.markdown('<h2 style="color:#1E3A8A; font-weight:700; text-align:center; margin-bottom:1rem;">Arquitectura DETR</h2>', unsafe_allow_html=True)
 
 with st.container():
-    col1, col2, col3 = st.columns([1, 2, 1])  # Columna central para centrar
+    col1, col2, col3 = st.columns([1, 2, 1])  
     with col2:
         # Primera imagen con título
         image1 = Image.open("static/detr_architecture.jpg")
@@ -113,7 +111,7 @@ with st.container():
         st.image(image2, width=450)
         st.markdown('<p style="text-align:center; font-weight:bold; color:#1E3A8A; margin-top:0.5rem;">DETR Detailed Architecture</p>', unsafe_allow_html=True)
 
-# Sección nueva: Arquitectura DETR (texto completo que enviaste)
+# Sección nueva: Arquitectura DETR 
 st.markdown('<div class="section-subtitle">1.1. Arquitectura DETR</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="architecture-section">
@@ -146,7 +144,6 @@ st.markdown('<div class="section-title">2. Resultados de Detección de Objetos</
 # 2.1 Comparaciones con Faster R-CNN
 st.markdown('<div class="section-subtitle">2.1. Comparaciones con Faster R-CNN</div>', unsafe_allow_html=True)
 
-# Imagen centrada con título debajo
 with st.container():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -154,7 +151,6 @@ with st.container():
         st.image(image_results, width=600)
         st.markdown('<p style="text-align:center; font-weight:bold; color:#1E3A8A; margin-top:0.5rem;">Comparación con Faster R-CNN con backbone ResNet-50 y ResNet-101 en el conjunto de validación COCO (‘+’: 9× programación)</p>', unsafe_allow_html=True)
 
-# Texto descriptivo después de la imagen
 st.markdown("""
 <div class="architecture-section">
 El entrenamiento del modelo base por 300 épocas en 16 GPUs V100 toma 3 días, con 4 imágenes por GPU (batch size total 64).<br><br>
@@ -167,7 +163,6 @@ DETR-DC5 con similar cantidad de parámetros y FLOPs tiene mayor AP, pero tambi�
 # 2.2 Capas Transformer
 st.markdown('<div class="section-subtitle">2.2. Capas Transformer</div>', unsafe_allow_html=True)
 
-# Imagen centrada con título debajo
 with st.container():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -175,7 +170,6 @@ with st.container():
         st.image(image_transformer, width=600)
         st.markdown('<p style="text-align:center; font-weight:bold; color:#1E3A8A; margin-top:0.5rem;">Transformer Layers</p>', unsafe_allow_html=True)
 
-# Texto descriptivo después de la imagen
 st.markdown("""
 <div class="architecture-section">
 Estudio con modelo DETR basado en ResNet-50 con 6 capas encoder y decoder, ancho 256.<br><br>
@@ -188,7 +182,6 @@ Se hipotetiza que el encoder con razonamiento global ayuda a separar objetos.
 # 2.3 Atención Encoder
 st.markdown('<div class="section-subtitle">2.3. Atención Encoder</div>', unsafe_allow_html=True)
 
-# Imagen centrada con título debajo
 with st.container():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
