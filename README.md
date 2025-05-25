@@ -4,6 +4,31 @@ Utiliza Streamlit para la visualización interactiva de los resultados y permite
 
 La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina detección de instancias y segmentación semántica, todo en una sola arquitectura basada en transformers.
 
+## 🧠 Arquitectura de Segmentación Panóptica con DETR
+
+<p align="center">
+  <img src="static/DETR_101.png" alt="Ejemplo de segmentación 1" width="500"/>
+</p>
+
+La arquitectura utilizada en este proyecto extiende el modelo **DETR (DEtection TRansformer)** para realizar **segmentación panóptica**, combinando detección de objetos y segmentación semántica en una sola estructura unificada. A continuación, se describen brevemente sus componentes principales:
+
+- **Imagen de entrada**: Se ingresa una imagen RGB de dimensiones `[3 × H × W]`.
+- **Embeddings de cajas**: Se generan embeddings aprendibles que representan posibles regiones de interés (objetos o áreas).
+- **Transformers y atención múltiple (Multi-head Attention)**: Estos embeddings interactúan con la imagen codificada mediante atención, generando mapas que destacan diferentes regiones de la imagen.
+- **Backbone FPN-CNN**: Se utilizan características extraídas de varias capas de ResNet (Res2 a Res5), combinadas mediante una red tipo FPN para refinar la segmentación.
+- **Máscaras de salida (logits)**: Se generan máscaras binarias para cada región detectada, de tamaño `[N × H/4 × W/4]`.
+- **Predicción final (Pixel-wise Argmax)**: Cada píxel es clasificado con una etiqueta única, resultando en una segmentación panóptica completa donde se identifican tanto "cosas" (como vacas) como "stuff" (como cielo o pasto).
+
+Esta arquitectura permite una segmentación precisa y semánticamente rica sin necesidad de postprocesamiento adicional como NMS.
+
+## 🔍 ¿Qué hace este modelo?
+**DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
+
+- Realizar **segmentación panóptica** precisa combinando detección de objetos y segmentación semántica.
+- Identificar tanto **cosas** (objetos individuales) como **stuff** (regiones amorfas).
+- Generar salidas con **máscaras, clases e instancias únicas** por píxel.
+- Usar una arquitectura **end-to-end** sin necesidad de postprocesamiento como NMS.
+
 ## 📸 Ejemplos de Segmentación Panóptica
 
 A continuación, se muestran algunos ejemplos del resultado generado por la aplicación. Cada imagen representa una salida panóptica del modelo **DETR-ResNet-101**, combinando detección de instancias y segmentación semántica.
@@ -62,14 +87,6 @@ Sigue estos pasos para ejecutar la aplicación localmente:
 ### Notas Adicionales
 - El puerto `8501` es el puerto por defecto de Streamlit
 - Asegúrate de que el puerto 8501 esté disponible en tu sistema
-
-## 🔍 ¿Qué hace este modelo?
-**DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
-
-- Realizar **segmentación panóptica** precisa combinando detección de objetos y segmentación semántica.
-- Identificar tanto **cosas** (objetos individuales) como **stuff** (regiones amorfas).
-- Generar salidas con **máscaras, clases e instancias únicas** por píxel.
-- Usar una arquitectura **end-to-end** sin necesidad de postprocesamiento como NMS.
 
 ## 📁 Estructura del proyecto
 ```
