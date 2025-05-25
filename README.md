@@ -7,7 +7,7 @@ La aplicación permite cargar una imagen y obtener como salida una segmentación
 ## 🧠 Arquitectura de Segmentación Panóptica con DETR
 
 <p align="center">
-  <img src="static/DETR_101.png" alt="Ejemplo de segmentación 1" width="500"/>
+  <img src="static/DETR_101.png" alt="Ejemplo de segmentación 1" width="600"/>
 </p>
 
 La arquitectura utilizada en este proyecto extiende el modelo **DETR (DEtection TRansformer)** para realizar **segmentación panóptica**, combinando detección de objetos y segmentación semántica en una sola estructura unificada. A continuación, se describen brevemente sus componentes principales:
