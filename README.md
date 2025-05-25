@@ -101,12 +101,12 @@ No somos autores del modelo original, únicamente replicamos su funcionamiento c
 - Santiago Valencia
 ---
 
-## 📚 Fuente del Modelo
+## Referencias
 
 Este proyecto está basado en el modelo DETR publicado por Facebook AI Research.
 
-- 📄 **Referencia APA:**  
+- **Paper:**
   Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., & Zagoruyko, S. (2020). *End-to-End Object Detection with Transformers*. arXiv preprint arXiv:2005.12872. https://doi.org/10.48550/arXiv.2005.12872
 
-- 🔗 **Repositorio oficial de GitHub:**  
+- **Repositorio oficial de GitHub:**  
   [https://github.com/facebookresearch/detr](https://github.com/facebookresearch/detr)
