@@ -4,7 +4,7 @@ Utiliza Streamlit para la visualización interactiva de los resultados y permite
 
 La aplicación permite cargar una imagen y obtener como salida una segmentación panóptica que combina detección de instancias y segmentación semántica, todo en una sola arquitectura basada en transformers.
 
-## 🧠 Arquitectura de Segmentación Panóptica con DETR
+## Arquitectura de Segmentación Panóptica con DETR
 
 <p align="center">
   <img src="static/DETR_101.png" alt="Ejemplo de segmentación 1" width="600"/>
@@ -21,7 +21,7 @@ La arquitectura utilizada en este proyecto extiende el modelo **DETR (DEtection 
 
 Esta arquitectura permite una segmentación precisa y semánticamente rica sin necesidad de postprocesamiento adicional como NMS.
 
-## 🔍 ¿Qué hace este modelo?
+## ¿Qué hace este modelo?
 **DETR-ResNet-101 Panoptic** es un modelo basado en *Transformers* que permite:
 
 - Realizar **segmentación panóptica** precisa combinando detección de objetos y segmentación semántica.
@@ -43,7 +43,7 @@ A continuación, se muestran algunos ejemplos del resultado generado por la apli
 
 Cada región de la imagen está coloreada según la clase identificada, y el modelo asigna un ID único por instancia cuando corresponde.
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
@@ -53,7 +53,7 @@ Cada región de la imagen está coloreada según la clase identificada, y el mod
   <img src="https://img.shields.io/badge/Detectron2-Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Detectron2" />
 </p>
 
-## 🚀 Despliegue del Proyecto
+## Despliegue del Proyecto
 
 Sigue estos pasos para ejecutar la aplicación localmente:
 
@@ -106,7 +106,7 @@ DETR-Inference-101/
 ├── home.py                            # Script de página principal de la aplicación
 └── requirements.txt                   # Lista de dependencias del proyecto Python 
 ```
-## 👥 Créditos de Desarrollo
+## Créditos de Desarrollo
 
 Esta implementación fue realizada como una prueba académica de inferencia y visualización del modelo **DETR-ResNet-101** aplicado a la **segmentación panóptica**.  
 No somos autores del modelo original, únicamente replicamos su funcionamiento como parte de una actividad de aprendizaje.
