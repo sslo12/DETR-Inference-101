@@ -9,66 +9,129 @@ st.set_page_config(
 
 st.markdown("""
     <style>
+    /* Títulos principales */
     .main-title {
         font-size: 2.2rem;
         font-weight: 800;
-        color: #1E3A8A;
+        color: #1E3A8A;  
         margin-bottom: 2rem;
         text-align: center;
         padding-bottom: 0.5rem;
         border-bottom: 3px solid #1E3A8A;
     }
+
+    /* Títulos de sección */
     .section-title {
-        font-size: 1.8rem; /* Más grande para título principal */
+        font-size: 1.8rem;
         font-weight: 700;
-        color: #1E40AF;
-        margin: 2rem 0 1rem 0;
+        color: #1E40AF;  
+        margin: 2.5rem 0 1.2rem 0; 
     }
+
+    /* Subtítulos */
     .section-subtitle {
-        font-size: 1.3rem; /* Más pequeño para subtítulo */
+        font-size: 1.3rem;
         font-weight: 600;
-        color: #1E40AF;
-        margin: 1.2rem 0 0.6rem 0;
+        color: #1E40AF; 
+        margin: 1.5rem 0 0.8rem 0;
     }
+
+    /* Tarjetas genéricas (blanco azulado) */
     .task-card {
-        background-color: #F8FAFC;
+        background-color: #F8FAFC; 
         border-radius: 10px;
         padding: 1.5rem;
         margin: 1rem 0;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        border-left: 4px solid #1E40AF;
+        border-left: 4px solid #1E40AF;  
+        color: #333333;  
     }
-    .io-card {
-        background-color: #EFF6FF;
-        border-radius: 8px;
-        padding: 1.2rem;
-        margin: 1rem 0;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
-    .output-card, .architecture-section {
-        background-color: #D6E8FF; /* Caja azul clara */
+
+    /* Tarjetas de entrada/salida (azul claro) */
+    .io-card, .output-card {
+        background-color: #EFF6FF;  
         border-radius: 10px;
-        padding: 1rem 1.5rem;
+        padding: 1.3rem;
+        margin: 1rem 0 1.5rem 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        border-left: 5px solid #1E40AF;  
+        color: #1E3A8A;  
+        line-height: 1.6;
+    }
+    
+    /* Secciones de arquitectura */
+    .architecture-section {
+        background-color: #DEECFF; 
+        border-radius: 10px;
+        padding: 1.3rem 1.5rem;
         margin: 1rem 0 2rem 0;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        border-left: 6px solid #1E40AF; /* Borde azul fuerte */
-        color: #0D47A1;
-        line-height: 1.5;
+        border-left: 6px solid #1E40AF;
+        color: #1E3A8A;  /* Texto azul oscuro */
+        line-height: 1.6;
     }
-    .image-wrapper {
+
+    /* Contenedores de imágenes */
+    .image-container {
         display: flex;
-        justify-content: center;
-        margin: 2rem 0;
+        flex-direction: column;
+        align-items: center;
+        margin: 2.5rem 0;
     }
+
+    /* Botones de navegación */
     .nav-button {
         text-align: center;
-        margin-top: 2rem;
+        margin: 3rem 0 1rem 0;
+    }
+
+    /* Imágenes de arquitectura */
+    .architecture-img {
+        max-width: 800px;
+        width: 100%;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    /* Subtítulos de imágenes */
+    .img-caption {
+        text-align: center;
+        font-weight: bold;
+        color: #1E3A8A; 
+        margin: 0.8rem 0 0 0;
+        font-size: 1.05rem;
+    }
+
+    /* Estilos para elementos internos */
+    .task-card p, .io-card p, .output-card p, .architecture-section p {
+        color: inherit; 
+        margin-bottom: 0.8rem;
+    }
+
+    .task-card ul, .io-card ul, .output-card ul, .architecture-section ul {
+        color: inherit;
+        padding-left: 1.2rem;
+        margin: 0.5rem 0;
+    }
+
+    .task-card li, .io-card li, .output-card li, .architecture-section li {
+        margin-bottom: 0.4rem;
+    }
+
+    .task-card strong, .io-card strong, .output-card strong, .architecture-section strong {
+        color: #1A365D;  /* Azul más oscuro para énfasis */
+    }
+
+    .task-card code, .io-card code, .output-card code, .architecture-section code {
+        background-color: rgba(255,255,255,0.7);
+        padding: 0.1rem 0.3rem;
+        border-radius: 3px;
+        font-family: monospace;
     }
     </style>
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="main-title">Tareas del Modelo DETR</div>', unsafe_allow_html=True)
-
 
 col1, col2 = st.columns(2)
 
@@ -95,21 +158,28 @@ with col2:
             <p>Esto se logra añadiendo una cabeza adicional de máscara binaria a la salida del decodificador.</p>
         </div>
     """, unsafe_allow_html=True)
+    
+st.markdown('<h2 style="color:#1E3A8A; font-weight:700; text-align:center; margin-top:3rem; margin-bottom:1rem;">Arquitectura DETR</h2>', unsafe_allow_html=True)
 
-st.markdown('<h2 style="color:#1E3A8A; font-weight:700; text-align:center; margin-bottom:1rem;">Arquitectura DETR</h2>', unsafe_allow_html=True)
-
+# Sección de imágenes de arquitectura 
 with st.container():
-    col1, col2, col3 = st.columns([1, 2, 1])  
+    # Primera imagen 
+    col1, col2, col3 = st.columns([1, 6, 1])
     with col2:
-        # Primera imagen con título
-        image1 = Image.open("static/detr_architecture.jpg")
-        st.image(image1, width=450)
-        st.markdown('<p style="text-align:center; font-weight:bold; color:#1E3A8A; margin-top:0.5rem;">DETR Architecture</p>', unsafe_allow_html=True)
-
-        # Segunda imagen con título
+        st.markdown('<div class="image-container">', unsafe_allow_html=True)
+        image1 = Image.open("static/detr_architecture.png")
+        st.image(image1, use_container_width=True, output_format='PNG')
+        st.markdown('<p class="img-caption">DETR Architecture</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Segunda imagen
+    col1, col2, col3 = st.columns([1, 4, 1])
+    with col2:
+        st.markdown('<div class="image-container">', unsafe_allow_html=True)
         image2 = Image.open("static/detr_detailed_architecture.jpg")
-        st.image(image2, width=450)
-        st.markdown('<p style="text-align:center; font-weight:bold; color:#1E3A8A; margin-top:0.5rem;">DETR Detailed Architecture</p>', unsafe_allow_html=True)
+        st.image(image2, width=600) 
+        st.markdown('<p class="img-caption">DETR Detailed Architecture</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # Sección nueva: Arquitectura DETR 
 st.markdown('<div class="section-subtitle">1.1. Arquitectura DETR</div>', unsafe_allow_html=True)
