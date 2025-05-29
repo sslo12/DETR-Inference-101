@@ -2,6 +2,7 @@
 import io
 import math
 import requests
+import time  # ⏱️ Para medir duración de la inferencia
 from copy import deepcopy
 
 import numpy as np
@@ -70,6 +71,7 @@ El proceso general del modelo es:
 """, unsafe_allow_html=True)
 
 # ---------- utilidades -------------------------------------------------
+
 def load_image(src):
     if isinstance(src, str) and src.startswith("http"):
         return Image.open(requests.get(src, stream=True).raw).convert("RGB")
@@ -97,6 +99,7 @@ def predict_panoptic(img: Image.Image, extractor, model, thr=0.85):
     return panoptic, outputs
 
 # ---------- visualización detectron2 -----------------------------------
+
 def visualize_with_detectron2(img_pil: Image.Image, result_dict: dict) -> np.ndarray:
     segments_info = deepcopy(result_dict["segments_info"])
     panoptic_seg = result_dict["segmentation"]
@@ -120,6 +123,7 @@ def visualize_with_detectron2(img_pil: Image.Image, result_dict: dict) -> np.nda
     return vis.get_image()[:, :, ::-1]
 
 # ---------- visualización matplotlib -----------------------------------
+
 def fig_to_buf(fig) -> io.BytesIO:
     buf = io.BytesIO()
     fig.savefig(buf, format="png", bbox_inches="tight", pad_inches=0)
@@ -148,6 +152,7 @@ def plot_masks_grid(outputs, keep_bool, ncols=5) -> io.BytesIO:
     return fig_to_buf(fig)
 
 # ---------- Streamlit main ---------------------------------------------
+
 def main():
     with st.sidebar:
         st.header("Configuración")
@@ -163,10 +168,12 @@ def main():
 
     if run_infer:
         extractor, model = load_model()
+        start_time = time.perf_counter()  # ⏱️ Inicio
         with st.spinner("Realizando inferencia…"):
             panoptic, raw_out = predict_panoptic(img, extractor, model, thr=0.85)
+        elapsed = time.perf_counter() - start_time  # ⏱️ Fin
 
-        st.success("Inferencia completada.")
+        st.success(f"Inferencia completada en {elapsed:.2f} s.")
         tabs = st.tabs(["Máscaras individuales", "Segmentación básica", "Con etiquetas (Detectron2)"])
 
         with tabs[0]:
