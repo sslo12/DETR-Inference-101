@@ -8,7 +8,7 @@ from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog
 from copy import deepcopy
 import tempfile
-import time 
+import time
 
 
 st.set_page_config(page_title="Inferencia Segmentación Panóptica", layout="centered")
@@ -102,7 +102,7 @@ def camera_inference():
     """
     Ejecuta inferencia de segmentación panóptica en tiempo real usando cámara web.
     """
-    # Título
+
     st.markdown(
         """
         <h1 style='text-align: center; margin-bottom: 30px; color: #1E3A8A;'>
@@ -112,7 +112,6 @@ def camera_inference():
         unsafe_allow_html=True
     )
     
-    # Subtítulo descriptivo
     st.markdown(
         """
         <div style='text-align: center; margin-bottom: 25px; color: #1E40AF;'>
@@ -166,6 +165,8 @@ def camera_inference():
             return
         
         frame_count = 0
+        processed_frames = 0
+        total_inference_time = 0
         
         try:
             while st.session_state.camera_active:
@@ -177,16 +178,20 @@ def camera_inference():
                 # Redimensionar para mejor rendimiento
                 frame = cv2.resize(frame, (640, 480))
                 
+                # Contador de frames totales
+                frame_count += 1
+                
                 if frame_count % FRAME_SKIP == 0:
                     img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
                     
                     # Medir tiempo de inferencia
-                    start_time = time.time()
+                    inference_start = time.time()
                     panoptic = predict_panoptic(img, extractor, model, CONFIDENCE_THRESHOLD)
-                    inference_time = time.time() - start_time
+                    inference_time = time.time() - inference_start
                     
-                    # Calcular FPS instantáneo
-                    current_fps = 1.0 / inference_time if inference_time > 0 else 0
+                    total_inference_time += inference_time
+                    processed_frames += 1
+                    avg_inference_time = total_inference_time / processed_frames if processed_frames > 0 else 0
                     
                     vis_img = visualize_with_detectron2(img, panoptic)
                     
@@ -201,14 +206,13 @@ def camera_inference():
                     # Mostrar estadísticas de rendimiento
                     metrics_placeholder.markdown(
                         f"""
-                        **Rendimiento de Inferencia**  
-                        • Frame: {frame_count}  
-                        • Tiempo procesamiento: {inference_time:.3f}s  
-                        • FPS: {current_fps:.1f}
+                        **Métricas de Rendimiento**  
+                        • Frame actual: {frame_count}  
+                        • Frames procesados: {processed_frames}  
+                        • Tiempo de inferencia (frame actual): {inference_time:.3f}s  
+                        • Tiempo promedio de inferencia: {avg_inference_time:.3f}s
                         """
                     )
-                
-                frame_count += 1
                 
                 # Pequeña pausa para permitir la interrupción
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -226,6 +230,7 @@ def video_inference():
     """
     Ejecuta inferencia de segmentación panóptica sobre un archivo de video cargado.
     """
+
     st.markdown(
         """
         <h1 style='text-align: center; margin-bottom: 30px; color: #1E3A8A;'>
@@ -304,6 +309,7 @@ def video_inference():
             
             frame_count = 0
             processed_frames = 0
+            total_inference_time = 0
             
             try:
                 while cap.isOpened() and st.session_state.video_active:
@@ -319,11 +325,13 @@ def video_inference():
                         img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
                         
                         # Inferencia
-                        start_time = time.time()
+                        inference_start = time.time()
                         panoptic = predict_panoptic(img, extractor, model, CONFIDENCE_THRESHOLD)
-                        inference_time = time.time() - start_time
+                        inference_time = time.time() - inference_start
                         
-                        current_fps = 1.0 / inference_time if inference_time > 0 else 0
+                        total_inference_time += inference_time
+                        processed_frames += 1
+                        avg_inference_time = total_inference_time / processed_frames if processed_frames > 0 else 0
                         
                         vis_img = visualize_with_detectron2(img, panoptic)
                         
@@ -335,15 +343,14 @@ def video_inference():
                             use_container_width=True
                         )
                         
-                        processed_frames += 1
-                        
                         # Mostrar métricas
                         metrics_placeholder.markdown(
                             f"""
-                            **Rendimiento de Inferencia**  
-                            • Frame: {frame_count}  
-                            • Tiempo procesamiento: {inference_time:.3f}s  
-                            • FPS: {current_fps:.1f}
+                            **Métricas de Rendimiento**  
+                            • Frame actual: {frame_count}  
+                            • Frames procesados: {processed_frames}  
+                            • Tiempo de inferencia (frame actual): {inference_time:.3f}s  
+                            • Tiempo promedio de inferencia: {avg_inference_time:.3f}s
                             """
                         )
                     
